@@ -9,33 +9,33 @@ Developed by dbulysse (Benjamin Pence)
 
 ## Usage
 
-  $ keepintouch keepintouch.data schedule | head -3
-  Paul Allen
-  Patrick Bateman
-  Huey, Louie, Dewie
+    $ keepintouch keepintouch.data schedule | head -3
+    Paul Allen
+    Patrick Bateman
+    Huey, Louie, Dewie
 
-  $ keepintouch keepintouch.data contacted Paul Allen
-  $
+    $ keepintouch keepintouch.data contacted Paul Allen
+    $
 
-  $ keepintouch keepintouch.data schedule | head -3
-  Patrick Bateman
-  Huey, Louie, Dewie
-  Paul Allen
+    $ keepintouch keepintouch.data schedule | head -3
+    Patrick Bateman
+    Huey, Louie, Dewie
+    Paul Allen
 
 # Data Format
 
 Currently, _keepintouch_ expects the user to supply all the people you wish to contact in the following file format:
 
-  interval
-  last contacted
-  name1
+    interval
+    last contacted
+    name1
   
-  interval
-  last contacted
-  name1
-  name2
+    interval
+    last contacted
+    name1
+    name2
   
-  ...
+    ...
 
 where each entry has
 
@@ -45,29 +45,29 @@ where each entry has
 
 A sample data file:
 
-  30
-  2014/11/01
-  Paul Allen
-  
-  365
-  2014/12/22
-  Patrick Bateman
-  
-  365
-  2014/12/22
-  Huey
-  Louie
-  Dewie
+    30
+    2014/11/01
+    Paul Allen
+ 
+    365
+    2014/12/22
+    Patrick Bateman
+ 
+    365
+    2014/12/22
+    Huey
+    Louie
+    Dewie
 
-  25
-  2015/01/22
-  Scrooge
+    25
+    2015/01/22
+    Scrooge
 
 # Scheduling
 
 For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
 
-  today - (last contacted + (interval +/- 25%)) 
+    today - (last contacted + (interval +/- 25%)) 
 
 Entries with the greatest score will be listed to you first and will tend to be those people that you have not contacted in a while and you wish to contact more often. You don't have to use the program on a regular basis.
 
