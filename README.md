@@ -98,6 +98,7 @@ The Random scheduler sorts the entries randomly and is not terribly useful. You 
 
 ## Feature
 
+* _keepintouch_ should allow dates to be entered in alternate or partial formats
 
 ## Fix
 
