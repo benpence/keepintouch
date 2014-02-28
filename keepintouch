@@ -5,7 +5,7 @@ usage(){
     echo "Usage: $0 DATAFILE contacted NAME"
 }
 
-keepintouch=" scala -cp .:$JAR com.dbulysse.keepintouch.app.Main"
+keepintouch="scala -cp .:$JAR com.dbulysse.keepintouch.app.Main"
 
 $keepintouch $@
 if [ "$?" -ne "0" ]; then

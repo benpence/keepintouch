@@ -1,7 +1,6 @@
 package com.dbulysse.keepintouch.schedule
 
 import scala.util.Random
-import java.util.Date
 import com.dbulysse.keepintouch.Entry
 import com.dbulysse.keepintouch.util.Days
 
