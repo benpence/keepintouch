@@ -27,8 +27,8 @@ object Main {
       args.drop(1).toSeq match {
         // TODO: Use a Map here and optionally a command line parsing library
         case Seq("schedule", "overdue") => schedule(entries, new OverdueScheduler)
-        case Seq("schedule","backlog" ) => schedule(entries, BacklogScheduler)
-        case Seq("schedule","random"  ) => schedule(entries, RandomScheduler)
+        case Seq("schedule", "backlog") => schedule(entries, BacklogScheduler)
+        case Seq("schedule", "random" ) => schedule(entries, RandomScheduler)
         case Nil                        => schedule(entries, new OverdueScheduler)
 
         case "contacted" +: pieces    => contacted(entries, pieces.mkString(" "), dataFile)
