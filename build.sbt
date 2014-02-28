@@ -1,6 +1,6 @@
 name := "keepintouch"
 
-version := "1.0.0-SNAPSHOT"
+version := "2.0.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   "org.specs2" %% "specs2" % "1.12.3" % "test")

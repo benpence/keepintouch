@@ -9,7 +9,7 @@ Developed by dbulysse (Benjamin Pence)
 
 ## Usage
 
-    $ keepintouch keepintouch.data schedule | head -3
+    $ keepintouch keepintouch.data | head -3
     Paul Allen
     Patrick Bateman
     Huey, Louie, Dewie
@@ -17,7 +17,7 @@ Developed by dbulysse (Benjamin Pence)
     $ keepintouch keepintouch.data contacted Paul Allen
     $
 
-    $ keepintouch keepintouch.data schedule | head -3
+    $ keepintouch keepintouch.data | head -3
     Patrick Bateman
     Huey, Louie, Dewie
     Paul Allen
@@ -65,17 +65,39 @@ A sample data file:
 
 # Scheduling
 
-For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
+## Overdue Scheduler
+
+The Overdue Scheduler is the default scheduler. For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
 
     today - (last contacted + (interval +/- 25%)) 
 
-Entries with the greatest score will be listed to you first and will tend to be those people that you have not contacted in a while and you wish to contact more often. You don't have to use the program on a regular basis.
+where the `+/- 25%` added or subtracted is randomized each time you run _keepintouch_. Entries with the greatest score will be listed to you first and will tend to be those people that you have not contacted in a while and you wish to contact more often. You don't have to use the program on a regular basis.
+
+You can use the Overdue Scheduler with either of these commands:
+
+    $ keepintouch keepintouch.data
+    $ keepintouch keepintouch.data schedule Overdue
+
+## Backlog Scheduler
+
+The Backlog Scheduler will sort the entries by:
+
+    today - (last contacted + interval)
+
+Every entry that is due in the future will not be shown. You can use the Backlog Scheduler with this command:
+
+    $ keepintouch keepintouch.data schedule backlog
+
+## Random Scheduler
+
+The Random scheduler sorts the entries randomly and is not terribly useful. You can use the Random Scheduler with this command:
+
+    $ keepintouch keepintouch.data schedule random
 
 # TODO
 
 ## Feature
 
-* _keepintouch_ should have more scheduling policies and let you choose at use time
 
 ## Fix
 

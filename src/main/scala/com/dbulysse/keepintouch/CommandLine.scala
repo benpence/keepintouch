@@ -2,7 +2,10 @@ package com.dbulysse.keepintouch.app
 
 import com.dbulysse.keepintouch.Entry
 import com.dbulysse.keepintouch.ContactedToday
+import com.dbulysse.keepintouch.schedule.Scheduler
 import com.dbulysse.keepintouch.schedule.OverdueScheduler
+import com.dbulysse.keepintouch.schedule.BacklogScheduler
+import com.dbulysse.keepintouch.schedule.RandomScheduler
 import com.dbulysse.keepintouch.io.PlaintextPutter
 import com.dbulysse.keepintouch.util.Terminal
 import com.dbulysse.keepintouch.util.FileUtils
@@ -12,7 +15,7 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     // TODO: Try to work this check into pattern matching without redundancy (implicitly?)
-    if (args.length < 2) Terminal.error("Supply more parameters")
+    if (args.length == 0) Terminal.error("Supply more parameters")
     else {
       val dataFile = args(0)
       val entries = FileUtils.read(dataFile) match {
@@ -22,17 +25,23 @@ object Main {
 
       // TODO: Research pattern matching on mutable Array
       args.drop(1).toSeq match {
-        case "schedule"  +: _       => schedule(entries)
-        case "contacted" +: pieces  => contacted(entries, pieces.mkString(" "), dataFile)
-        case _                      => Terminal.error("Unrecognized parameters")
+        // TODO: Use a Map here and optionally a command line parsing library
+        case Seq("schedule", "overdue") => schedule(entries, new OverdueScheduler)
+        case Seq("schedule","backlog" ) => schedule(entries, BacklogScheduler)
+        case Seq("schedule","random"  ) => schedule(entries, RandomScheduler)
+        case Nil                        => schedule(entries, new OverdueScheduler)
+
+        case "contacted" +: pieces    => contacted(entries, pieces.mkString(" "), dataFile)
+
+        case _                        => Terminal.error("Unrecognized parameters")
       }
     }
   }
 
-  def schedule(entries: Seq[Entry]): Unit = {
+  def schedule(entries: Seq[Entry], scheduler: Scheduler): Unit = {
     Terminal.writeLine(
       // TODO: Add option for choosing scheduler
-      (new OverdueScheduler)(entries)
+      scheduler(entries)
         .map(_.names.mkString(", "))    // Names are comma separated
         .mkString("\n"))                // Lists of names are newline separated
   }
