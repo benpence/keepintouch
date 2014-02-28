@@ -6,15 +6,14 @@ import com.dbulysse.keepintouch.util.Days
 
 object OverdueScheduler {
   val DefaultWeight = 0.25
-  val instance = new OverdueScheduler(DefaultWeight)
-
-  def apply(entries: Seq[Entry]): Seq[Entry] = instance(entries)
 }
 
 /*
  * Sort with most overdue entries first. Adds or subtracts a weighted random value a
  */
 class OverdueScheduler(val randomWeight: Double) extends Scheduler {
+  def this() = this(OverdueScheduler.DefaultWeight)
+
   if (randomWeight < 0 || 1 < randomWeight) 
     throw new Exception("randomWeight must be 0 <= randomWeight <= 1")
 

@@ -32,7 +32,7 @@ object Main {
   def schedule(entries: Seq[Entry]): Unit = {
     Terminal.writeLine(
       // TODO: Add option for choosing scheduler
-      OverdueScheduler(entries)
+      (new OverdueScheduler)(entries)
         .map(_.names.mkString(", "))    // Names are comma separated
         .mkString("\n"))                // Lists of names are newline separated
   }
