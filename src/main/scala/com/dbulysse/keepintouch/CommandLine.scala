@@ -71,5 +71,7 @@ object Main {
 
     if (!FileUtils.replace(dataFile, PlaintextPutter(newEntries)))
       Terminal.error("Unable to edit '%s'.".format(dataFile))
+
+    Terminal.writeLine("Successfully set the last contaced field for '%s' to today.".format(name))
   }
 }
