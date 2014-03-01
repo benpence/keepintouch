@@ -11,7 +11,7 @@ import com.dbulysse.keepintouch.util.Terminal
 import com.dbulysse.keepintouch.util.FileUtils
 
 object Main {
-  lazy val IntervalRegex = """\d+""".r
+  lazy val IntervalRegex = """^\d+$""".r
 
   def main(args: Array[String]): Unit = {
     // TODO: Try to work this check into pattern matching without redundancy (implicitly?)
