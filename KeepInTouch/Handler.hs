@@ -5,14 +5,11 @@ module KeepInTouch.Handler
 
 import Data.Char(toUpper)
 import Data.List(partition)
-import qualified Data.Map as Map
 import Data.Maybe(fromMaybe)
 import Text.Read(readMaybe)
 
-import KeepInTouch.Entry(Entry,names,lastContacted)
-import KeepInTouch.Interface(Interface,Problem(..),entriesIO,newPerson,replaceData,scheduled)
-import KeepInTouch.Schedule(Policy(..))
-import KeepInTouch.Utils(todayIO)
+import KeepInTouch.Type(Entry(..),Interface(..),Problem(..),Scheduler(..))
+import KeepInTouch.Util(todayIO)
 
 -- Add or update when you contacted someone
 -- NOTE: The order of the inputted entries will not be preserved
@@ -20,34 +17,32 @@ contactHandler :: (Interface a) => a -> String -> IO (Maybe Problem)
 contactHandler interface name =
   let
     uppercase    = map toUpper
-
     containsName = elem (uppercase name) . map uppercase . names
-    extractMatch = partition containsName
-
-    write        = replaceData interface
 
     -- One entry contains name
-    onMatch e es = do
+    onOneMatch e es = do
         today <- todayIO
         let newEntries = e { lastContacted = today } : es
-        write newEntries
+        replaceData interface $ newEntries
 
     -- 0 or more than 1 entries contain name
-    onNoMatch es = do
+    onNotOneMatch es = do
         newPerson <- (newPerson interface) name
         case newPerson of
-            Just p  -> write $ p : es
+            Just p  -> replaceData interface $ p : es
+            -- TODO: i18n
             Nothing -> return $ Just Usage
   in do
     entries <- entriesIO interface
 
-    -- Find entry with name if it exists
-    case extractMatch entries of
-        ([entry], rest) -> onMatch entry rest
-        _               -> onNoMatch entries
+    -- Seperate entries containing name from those that do not
+    case partition containsName entries of
+        ([entry], rest) -> onOneMatch entry rest
+        _               -> onNotOneMatch entries
 
-scheduleHandler :: (Interface a, Policy b) => a -> b -> IO (Maybe Problem)
-scheduleHandler interface policy = do
+scheduleHandler :: (Interface a, Scheduler b) => a -> b -> IO (Maybe Problem)
+scheduleHandler interface scheduler = do
     entries <- entriesIO interface
-    let scheduledEntries = schedule policy $ entries
+    let scheduledEntries = schedule scheduler $ entries
     scheduled interface $ scheduledEntries
+    return Nothing

@@ -9,12 +9,13 @@ module KeepInTouch.ParseFormat
 , plaintextFormatter
 ) where
 
-import Data.Char(isDigit)
+import Data.Char(isDigit,isSpace)
 import Data.List(intercalate)
 import Data.Maybe(fromJust,isJust)
 import Data.Time.Format(formatTime,parseTime)
-import KeepInTouch.Entry(Entry(..),interval,lastContacted,names)
 import System.Locale(defaultTimeLocale)
+
+import KeepInTouch.Type(Entry(..))
 
 type Parser = String -> [Entry]
 type Formatter = [Entry] -> String
@@ -43,18 +44,18 @@ plaintextParser' (iLine : next@(dLine : name@(_:_) : rest)) =
 
     date = parseTime defaultTimeLocale dateString dLine
     hasDate = isJust date
+
+    isBlank = all isSpace
+
+    (names', rest') = break isBlank rest
+    entry = Entry
+        { interval      = read iLine
+        , lastContacted = fromJust date
+        , names         = name : names'
+        }
   in
     if hasInterval && hasDate
-    then
-      let
-        (names', rest') = break null rest
-        entry = Entry
-            { interval      = read iLine
-            , lastContacted = fromJust date
-            , names         = name : names'
-            }
-      in
-        entry : plaintextParser' rest'
+    then entry : plaintextParser' rest'
     else plaintextParser' next
 plaintextParser' _ = []
 
@@ -69,10 +70,10 @@ plaintextFormatter :: Formatter
 plaintextFormatter =
   let
     format :: Entry -> String
-    format e = unlines $ map ($ e) [intervalFormat, dateFormat, namesFormat]
+    format e = intercalate "\n" $ map ($ e) [intervalFormat, dateFormat, namesFormat]
 
-    intervalFormat = show
+    intervalFormat = show . interval
     dateFormat     = formatTime defaultTimeLocale dateString . lastContacted
-    namesFormat    = unlines . names
+    namesFormat    = intercalate "\n" . names
   in
     intercalate "\n\n" . map format

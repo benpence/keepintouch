@@ -1,4 +1,4 @@
-module KeepInTouch.Utils
+module KeepInTouch.Util
 ( todayIO
 ) where
 

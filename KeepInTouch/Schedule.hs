@@ -1,35 +1,38 @@
 module KeepInTouch.Schedule
 (
   --
-  Policy(..)
-, Weight
-, Backlog
+  Weight(..)
+, defaultWeight
+
+, Backlog(..)
 ) where
 
 import Data.Function(on)
 import Data.List(sort)
 import Data.Time.Calendar(Day,addDays)
+import System.Random(randoms,RandomGen)
 
-import KeepInTouch.Entry(Entry(..))
+import KeepInTouch.Type(Entry(..),Scheduler(..))
 
-class Policy a where
-    schedule :: a -> [Entry] -> [Entry]
-
-data Weight = Weight
+data Weight a = Weight
     { weight    :: Float
-    , generator :: [Float]
+    , generator :: a
     }
+
+-- Default weight 
+defaultWeight :: Float
+defaultWeight = 0.25
 
 -- Entries sorted by lastContacted + a portion of the interval where the portion
 --   of the interval will be randomly in the range:
 --
 --   interval -/+ (weight * interval)
 --
-instance Policy Weight where
+instance (RandomGen a) => Scheduler (Weight a) where
     schedule (Weight weight generator) =
       let
         -- Pair with random values
-        percentages = zip generator
+        percentages = zip (randoms generator)
 
         -- lastContacted + (1 - weight) * interval +/- weight * random
         weightedValue :: (Float, Entry) -> (Day, Entry)
@@ -52,12 +55,15 @@ data Backlog = Backlog
     { today :: Day
     }
 
-instance Policy Backlog where
+instance Scheduler Backlog where
     -- Entries due (lastContacted + interval) before today
-    schedule (Backlog today) =
+    schedule (Backlog thisDay) =
       let
         overdue e = addDays (interval e) (lastContacted e)
-        overdues = map (\e -> (overdue e, e))
-        sortedEntries = map snd . sort . overdues
+        sortedWithOverdue = sort . map (\e -> (overdue e, e))
+
+        beforeToday = fst . break ((thisDay <=) . fst)
+
+        toEntries = map snd
       in
-        filter ((<= today) . lastContacted) . sortedEntries
+        toEntries . beforeToday . sortedWithOverdue
