@@ -38,7 +38,7 @@ dateString = "%Y/%m/%d"
 plaintextParser :: Parser
 plaintextParser = plaintextParser' . lines
 
-plaintextParser' (iLine : next@(dLine : name@(_:_) : rest)) =
+plaintextParser' (iLine : next@(dLine : name : rest)) =
   let
     hasInterval = all isDigit iLine
 
@@ -46,6 +46,7 @@ plaintextParser' (iLine : next@(dLine : name@(_:_) : rest)) =
     hasDate = isJust date
 
     isBlank = all isSpace
+    hasName = not $ all isSpace name
 
     (names', rest') = break isBlank rest
     entry = Entry
@@ -54,7 +55,7 @@ plaintextParser' (iLine : next@(dLine : name@(_:_) : rest)) =
         , names         = name : names'
         }
   in
-    if hasInterval && hasDate
+    if hasName && hasInterval && hasDate
     then entry : plaintextParser' rest'
     else plaintextParser' next
 plaintextParser' _ = []
