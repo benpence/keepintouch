@@ -61,7 +61,7 @@ instance Interface CommandLine where
         return Nothing
 
     scheduled _ entries = do
-        let showEntriesPeople = unlines . map (intercalate ", " . names)
+        let showEntriesPeople = intercalate "\n" . map (intercalate ", " . names)
         putStrLn $ showEntriesPeople entries
         return Nothing
 
