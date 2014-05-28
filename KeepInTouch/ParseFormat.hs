@@ -51,7 +51,7 @@ plaintextParser' (iLine : next@(dLine : name : rest)) =
     hasDate = isJust date
 
     isBlank = all isSpace
-    hasName = not $ all isSpace name
+    hasName = not $ isBlank name
 
     -- Consume names until blank line
     (names', rest') = break isBlank rest
