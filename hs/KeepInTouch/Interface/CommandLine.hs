@@ -1,12 +1,13 @@
 module KeepInTouch.Interface.CommandLine
 (
   CommandLine(..)
-, main
+, defaultCommandLine
+, handleArgs
+, handleResult
 ) where
 
 import Data.List(intercalate)
 import Data.Time.Clock(getCurrentTime,utctDay)
-import System.Environment(getArgs)
 import System.IO.Error(IOError,ioeGetErrorString)
 import System.Random(randoms,newStdGen)
 import Text.Read(readMaybe)
@@ -109,20 +110,8 @@ handleResult (Just Usage)    = format usage
         ]
 handleResult _               = ""
 
-getFile :: [String] -> (CommandLine, [String])
-getFile (file : rest) = (defaultCommandLine { dataFile = file }, rest)
-getFile _             = (defaultCommandLine,                     [])
-
 defaultCommandLine = CommandLine
     { dataFile  = "~/.keepintouch.data"
     , parser    = plaintextParser
     , formatter = plaintextFormatter
     }
-
-main :: IO ()
-main = do
-    params <- getArgs
-    let (interface, args) = getFile params
-    result <- handleArgs interface args
-    putStr $ handleResult result
-    return ()
