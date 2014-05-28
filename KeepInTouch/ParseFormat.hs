@@ -17,12 +17,17 @@ import System.Locale(defaultTimeLocale)
 
 import KeepInTouch.Type(Entry(..))
 
+-- | Transforms a String into Entries.
+-- JSON, XML, or just newline-delimited lines are examples of input formats
 type Parser = String -> [Entry]
+
+-- | Transforms Entries into a String.
+-- JSON, XML, or just newline-delimited lines are examples of output formats
 type Formatter = [Entry] -> String
 
 dateString = "%Y/%m/%d"
 
--- Parse entries in format:
+-- | Parse entries in format:
 --
 --  interval
 --  date
@@ -48,6 +53,7 @@ plaintextParser' (iLine : next@(dLine : name : rest)) =
     isBlank = all isSpace
     hasName = not $ all isSpace name
 
+    -- Consume names until blank line
     (names', rest') = break isBlank rest
     entry = Entry
         { interval      = read iLine
@@ -60,7 +66,7 @@ plaintextParser' (iLine : next@(dLine : name : rest)) =
     else plaintextParser' next
 plaintextParser' _ = []
 
--- Format entries into:
+-- | Format entries into:
 --
 --  interval
 --  date

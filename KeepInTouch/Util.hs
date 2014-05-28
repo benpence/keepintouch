@@ -5,5 +5,6 @@ module KeepInTouch.Util
 import Data.Time.Clock(getCurrentTime,utctDay)
 import Data.Time.Calendar(Day)
 
+-- | Today's date
 todayIO :: IO Day
 todayIO = fmap utctDay getCurrentTime

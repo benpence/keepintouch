@@ -11,7 +11,7 @@ import Text.Read(readMaybe)
 import KeepInTouch.Type(Entry(..),Interface(..),Problem(..),Scheduler(..))
 import KeepInTouch.Util(todayIO)
 
--- Add or update when you contacted someone
+-- | Add or update when you contacted someone
 -- NOTE: The order of the inputted entries will not be preserved
 contactHandler :: (Interface a) => a -> String -> IO (Maybe Problem)
 contactHandler interface name =
@@ -40,6 +40,7 @@ contactHandler interface name =
         ([entry], rest) -> onOneMatch entry rest
         _               -> onNotOneMatch entries
 
+-- | Schedule entries, returning all or some of them in a different order
 scheduleHandler :: (Interface a, Scheduler b) => a -> b -> IO (Maybe Problem)
 scheduleHandler interface scheduler = do
     entries <- entriesIO interface
