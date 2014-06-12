@@ -9,15 +9,15 @@ Developed by dbulysse (Benjamin Pence)
 
 ## Usage
 
-    $ keepintouch keepintouch.data | head -3
+    $ keepintouch keepintouch.data
     Paul Allen
     Patrick Bateman
     Huey, Louie, Dewie
 
-    $ keepintouch keepintouch.data contacted Paul Allen
+    $ keepintouch keepintouch.data contact Paul Allen
     $
 
-    $ keepintouch keepintouch.data | head -3
+    $ keepintouch keepintouch.data
     Patrick Bateman
     Huey, Louie, Dewie
     Paul Allen
@@ -59,15 +59,11 @@ A sample data file:
     Louie
     Dewie
 
-    25
-    2015/01/22
-    Scrooge
-
 # Scheduling
 
 ## Overdue Scheduler
 
-The Overdue Scheduler is the default scheduler. For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
+For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
 
     today - (last contacted + (interval +/- 25%)) 
 
@@ -80,7 +76,7 @@ You can use the Overdue Scheduler with either of these commands:
 
 ## Backlog Scheduler
 
-The Backlog Scheduler will sort the entries by:
+The Backlog Scheduler is the default scheduler. The Backlog Scheduler will sort the entries by:
 
     today - (last contacted + interval)
 

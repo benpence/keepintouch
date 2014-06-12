@@ -29,9 +29,10 @@ object Main {
       case Seq("schedule", "overdue") => schedule(entries, new OverdueScheduler)
       case Seq("schedule", "backlog") => schedule(entries, BacklogScheduler)
       case Seq("schedule", "random" ) => schedule(entries, RandomScheduler)
+      case Seq("schedule")            => schedule(entries, BacklogScheduler)
       case Nil                        => schedule(entries, BacklogScheduler)
 
-      case "contacted" +: pieces      => contacted(entries, pieces.mkString(" "), dataFile)
+      case "contact" +: pieces      => contacted(entries, pieces.mkString(" "), dataFile)
 
       case _                        => Terminal.error("Unrecognized parameters")
     }
