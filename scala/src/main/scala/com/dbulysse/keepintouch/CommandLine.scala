@@ -40,7 +40,6 @@ object Main {
 
   def schedule(entries: Seq[Entry], scheduler: Scheduler): Unit = {
     Terminal.writeLine(
-      // TODO: Add option for choosing scheduler
       scheduler(entries)
         .map(_.names.mkString(", "))    // Names are comma separated
         .mkString("\n"))                // Lists of names are newline separated
