@@ -95,6 +95,9 @@ handleArgs i ["schedule", "weight", w]      =
         }
     scheduleHandler i policy
 
+-- Default Scheduler
+handleArgs i [] = handleArgs i ["schedule", "backlog"]
+
 handleArgs _ _ = return $ Just Usage
 
 handleResult :: Maybe Problem -> String
@@ -104,7 +107,7 @@ handleResult (Just Usage)    = format usage
     format = unlines . map ("keepintouch FILE " ++)
     usage  = 
         [ "contact NAME"
-        , "schedule [backlog]"
+        , "[schedule [backlog]]"
         , "schedule weight"
         , "schedule weight WEIGHT"
         ]

@@ -14,27 +14,26 @@ object Main {
   lazy val IntervalRegex = """^\d+$""".r
 
   def main(args: Array[String]): Unit = {
-    // TODO: Try to work this check into pattern matching without redundancy (implicitly?)
-    if (args.length == 0) Terminal.error("Supply more parameters")
-    else {
-      val dataFile = args(0)
-      val entries = FileUtils.read(dataFile) match {
-        case None         => { Terminal.error("Cannot access '%s'".format(dataFile)); Seq[Entry]() }
-        case Some(input)  => PlaintextPutter(input)
-      }
+    val dataFile =
+      if (args.length == 0) "~/.keepintouch.data"
+      else                  args(0)
 
-      // TODO: Research pattern matching on mutable Array
-      args.drop(1).toSeq match {
-        // TODO: Use a Map here and optionally a command line parsing library
-        case Seq("schedule", "overdue") => schedule(entries, new OverdueScheduler)
-        case Seq("schedule", "backlog") => schedule(entries, BacklogScheduler)
-        case Seq("schedule", "random" ) => schedule(entries, RandomScheduler)
-        case Nil                        => schedule(entries, new OverdueScheduler)
+    val entries = FileUtils.read(dataFile) match {
+      case None         => { Terminal.error("Cannot access '%s'".format(dataFile)); Seq[Entry]() }
+      case Some(input)  => PlaintextPutter(input)
+    }
 
-        case "contacted" +: pieces    => contacted(entries, pieces.mkString(" "), dataFile)
+    // TODO: Research pattern matching on mutable Array
+    args.drop(1).toSeq match {
+      // TODO: Use a Map here and optionally a command line parsing library
+      case Seq("schedule", "overdue") => schedule(entries, new OverdueScheduler)
+      case Seq("schedule", "backlog") => schedule(entries, BacklogScheduler)
+      case Seq("schedule", "random" ) => schedule(entries, RandomScheduler)
+      case Nil                        => schedule(entries, BacklogScheduler)
 
-        case _                        => Terminal.error("Unrecognized parameters")
-      }
+      case "contacted" +: pieces      => contacted(entries, pieces.mkString(" "), dataFile)
+
+      case _                        => Terminal.error("Unrecognized parameters")
     }
   }
 

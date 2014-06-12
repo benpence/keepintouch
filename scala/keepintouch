@@ -2,7 +2,7 @@
 
 usage(){
     echo "Usage: $0 DATAFILE"
-    echo "Usage: $0 DATAFILE schedule {overdue|backlog|random}"
+    echo "Usage: $0 DATAFILE [schedule [{overdue|backlog|random}]]"
     echo "Usage: $0 DATAFILE contacted NAME"
 }
 
