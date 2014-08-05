@@ -1,9 +1,7 @@
 module KeepInTouch.Interface.CommandLine
 (
   CommandLine(..)
-, defaultCommandLine
-, handleArgs
-, handleResult
+, handleInput
 ) where
 
 import Data.List(intercalate)
@@ -66,6 +64,12 @@ instance Interface CommandLine where
         putStrLn $ showEntriesPeople entries
         return Nothing
 
+handleInput :: [String] -> IO String
+handleInput (file : rest) = fmap handleResult result
+  where
+    result = handleArgs (defaultCommandLine file) rest
+handleInput _             = return . handleResult $ Just Usage
+
 handleArgs :: (Interface a) => a -> [String] -> IO (Maybe Problem)
 -- Contact
 handleArgs i ("contact"  : pieces@(_:_))      =
@@ -113,8 +117,9 @@ handleResult (Just Usage)    = format usage
         ]
 handleResult _               = ""
 
-defaultCommandLine = CommandLine
-    { dataFile  = "~/.keepintouch.data"
+defaultCommandLine :: String -> CommandLine
+defaultCommandLine file = CommandLine
+    { dataFile  = file
     , parser    = plaintextParser
     , formatter = plaintextFormatter
     }
