@@ -87,17 +87,15 @@ handleArgs i ["schedule", "backlog"]        = do
 handleArgs i ["schedule", "weight"]         =
     handleArgs i ["schedule", "weight", show defaultWeight]
 handleArgs i ["schedule", "weight", w]      =
-  let
-    weight = case readMaybe w of
-        Just f | 0 <= f && f <= 1 -> f
-        _                         -> defaultWeight
-  in do
-    gen <- newStdGen
-    let policy = Weight {
-          weight    = weight
-        , generator = gen
-        }
-    scheduleHandler i policy
+    case readMaybe w of
+        Just f | 0 <= f && f <= 1 -> do
+            gen <- newStdGen
+            let policy = Weight {
+                  weight    = f
+                , generator = gen
+                }
+            scheduleHandler i policy
+        _                         -> return $ Just Usage
 
 -- Default Scheduler
 handleArgs i [] = handleArgs i ["schedule", "backlog"]
@@ -112,8 +110,7 @@ handleResult (Just Usage)    = format usage
     usage  = 
         [ "contact NAME"
         , "[schedule [backlog]]"
-        , "schedule weight"
-        , "schedule weight WEIGHT"
+        , "schedule weight [WEIGHT]"
         ]
 handleResult _               = ""
 
