@@ -7,13 +7,13 @@ module KeepInTouch.Interface.CommandLine
 import Data.List(intercalate)
 import Data.Time.Clock(getCurrentTime,utctDay)
 import System.IO.Error(IOError,ioeGetErrorString)
-import System.Random(randoms,newStdGen)
+import System.Random(newStdGen)
 import Text.Read(readMaybe)
 
 import KeepInTouch.ParseFormat(Parser,plaintextParser)
 import KeepInTouch.ParseFormat(Formatter,plaintextFormatter)
 import KeepInTouch.Handler(scheduleHandler,contactHandler)
-import KeepInTouch.Schedule(Backlog(..),Weight(..),defaultWeight)
+import KeepInTouch.Schedule(Backlog(..),Weight(..),defaultWeight,Shuffle(..))
 import KeepInTouch.Type(Entry(..),Interface(..),Problem(..))
 import KeepInTouch.Util(todayIO)
 
@@ -97,6 +97,10 @@ handleArgs i ["schedule", "weight", w]      =
             scheduleHandler i policy
         _                         -> return $ Just Usage
 
+-- Random Scheduler
+handleArgs i ["schedule", "random"]         =
+    fmap Shuffle newStdGen >>= scheduleHandler i
+
 -- Default Scheduler
 handleArgs i [] = handleArgs i ["schedule", "backlog"]
 
@@ -111,6 +115,7 @@ handleResult (Just Usage)    = format usage
         [ "contact NAME"
         , "[schedule [backlog]]"
         , "schedule weight [WEIGHT]"
+        , "schedule random"
         ]
 handleResult _               = ""
 

@@ -5,6 +5,8 @@ module KeepInTouch.Schedule
 , defaultWeight
 
 , Backlog(..)
+
+, Shuffle(..)
 ) where
 
 import Data.Function(on)
@@ -13,6 +15,7 @@ import Data.Time.Calendar(Day,addDays)
 import System.Random(randoms,RandomGen)
 
 import KeepInTouch.Type(Entry(..),Scheduler(..))
+import KeepInTouch.Util(shuffle)
 
 data Weight a = Weight
     { weight    :: Float
@@ -67,3 +70,8 @@ instance Scheduler Backlog where
         toEntries = map snd
       in
         toEntries . beforeToday . sortedWithOverdue
+
+data Shuffle a = Shuffle a
+
+instance (RandomGen a) => Scheduler (Shuffle a) where
+    schedule (Shuffle gen) = shuffle gen
