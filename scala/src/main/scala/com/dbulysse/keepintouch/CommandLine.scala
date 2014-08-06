@@ -1,7 +1,5 @@
-package com.dbulysse.keepintouch.app
+package com.dbulysse.keepintouch
 
-import com.dbulysse.keepintouch.Entry
-import com.dbulysse.keepintouch.ContactedToday
 import com.dbulysse.keepintouch.schedule.Scheduler
 import com.dbulysse.keepintouch.schedule.OverdueScheduler
 import com.dbulysse.keepintouch.schedule.BacklogScheduler
