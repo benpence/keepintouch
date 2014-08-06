@@ -61,7 +61,7 @@ A sample data file:
 
 # Scheduling
 
-## Overdue Scheduler
+## Weight Scheduler
 
 For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
 
@@ -69,10 +69,12 @@ For each entry in the data file, _keepintouch_ determines a score to sort the en
 
 where the `+/- 25%` added or subtracted is randomized each time you run _keepintouch_. Entries with the greatest score will be listed to you first and will tend to be those people that you have not contacted in a while and you wish to contact more often. You don't have to use the program on a regular basis.
 
-You can use the Overdue Scheduler with either of these commands:
+You can use the Weight Scheduler with either of these commands:
 
-    $ keepintouch keepintouch.data
-    $ keepintouch keepintouch.data schedule Overdue
+    $ keepintouch keepintouch.data schedule weight
+    $ keepintouch keepintouch.data schedule weight 0.25
+    
+Note that with the second command, you can specify how much of the score is left up to chance (0.0 <= weight <= 1.0).
 
 ## Backlog Scheduler
 
@@ -80,8 +82,10 @@ The Backlog Scheduler is the default scheduler. The Backlog Scheduler will sort 
 
     today - (last contacted + interval)
 
-Every entry that is due in the future will not be shown. You can use the Backlog Scheduler with this command:
+Every entry that is due in the future will not be shown. You can use the Backlog Scheduler with these commands:
 
+    $ keepintouch keepintouch.data
+    $ keepintouch keepintouch.data schedule
     $ keepintouch keepintouch.data schedule backlog
 
 ## Random Scheduler
@@ -89,14 +93,3 @@ Every entry that is due in the future will not be shown. You can use the Backlog
 The Random scheduler sorts the entries randomly and is not terribly useful. You can use the Random Scheduler with this command:
 
     $ keepintouch keepintouch.data schedule random
-
-# TODO
-
-## Feature
-
-* _keepintouch_ should allow dates to be entered in alternate or partial formats
-
-## Fix
-
-* _keepintouch_ should validate dates in the datafile
-* _keepintouch_ should have more unit tests
