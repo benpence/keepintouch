@@ -14,9 +14,9 @@ object Main {
   lazy val IntervalRegex = """^\d+$""".r
 
   def main(args: Array[String]): Unit = {
-    val dataFile =
-      if (args.length == 0) "~/.keepintouch.data"
-      else                  args(0)
+    if (args.length == 0) Terminal.error("Unrecognized parameters")
+
+    val dataFile = args(0)
 
     val entries = FileUtils.read(dataFile) match {
       case None         => { Terminal.error("Cannot access '%s'".format(dataFile)); Seq[Entry]() }
