@@ -22,7 +22,6 @@ object Main {
       case Some(input)  => PlaintextPutter(input)
     }
 
-    // TODO: Research pattern matching on mutable Array
     args.drop(1).toSeq match {
       // TODO: Use a Map here and optionally a command line parsing library
       case Seq("schedule", "weight", w) if Parse.isWeight(w)
