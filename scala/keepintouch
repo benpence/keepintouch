@@ -1,9 +1,10 @@
 #!/bin/sh
 
 usage(){
-    echo "Usage: $0 DATAFILE"
-    echo "Usage: $0 DATAFILE [schedule [{overdue|backlog|random}]]"
-    echo "Usage: $0 DATAFILE contacted NAME"
+    echo "Usage: $0 FILE [schedule [backlog]]"
+    echo "Usage: $0 FILE schedule weight [WEIGHT]"
+    echo "Usage: $0 FILE schedule random"
+    echo "Usage: $0 FILE contact NAME"
 }
 
 keepintouch="scala -cp .:$JAR com.dbulysse.keepintouch.Main"
