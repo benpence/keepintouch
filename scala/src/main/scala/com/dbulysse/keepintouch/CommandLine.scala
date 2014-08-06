@@ -9,6 +9,7 @@ import com.dbulysse.keepintouch.schedule.RandomScheduler
 import com.dbulysse.keepintouch.io.PlaintextPutter
 import com.dbulysse.keepintouch.util.Terminal
 import com.dbulysse.keepintouch.util.FileUtils
+import com.dbulysse.keepintouch.util.Parse
 
 object Main {
   lazy val IntervalRegex = """^\d+$""".r
@@ -26,7 +27,9 @@ object Main {
     // TODO: Research pattern matching on mutable Array
     args.drop(1).toSeq match {
       // TODO: Use a Map here and optionally a command line parsing library
-      case Seq("schedule", "overdue") => schedule(entries, new OverdueScheduler)
+      case Seq("schedule", "weight", w) if Parse.isWeight(w)
+                                      => schedule(entries, new OverdueScheduler(w.toDouble))
+      case Seq("schedule", "weight")  => schedule(entries, new OverdueScheduler)
       case Seq("schedule", "backlog") => schedule(entries, BacklogScheduler)
       case Seq("schedule", "random" ) => schedule(entries, RandomScheduler)
       case Seq("schedule")            => schedule(entries, BacklogScheduler)
