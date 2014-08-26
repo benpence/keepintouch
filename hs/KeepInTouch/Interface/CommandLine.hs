@@ -110,7 +110,7 @@ handleResult :: Maybe Problem -> String
 handleResult (Just (Fail e)) = ioeGetErrorString e
 handleResult (Just Usage)    = format usage
   where
-    format = unlines . map ("keepintouch FILE " ++)
+    format = unlines . map ("Usage: keepintouch FILE " ++)
     usage  = 
         [ "contact NAME"
         , "[schedule [backlog]]"
