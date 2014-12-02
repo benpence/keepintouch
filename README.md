@@ -9,10 +9,14 @@ Developed by dbulysse (Benjamin Pence)
 
 ## Usage
 
+When _keepintouch_ is run on the data file (`keepintouch.data` in this example), it will schedule the entries from the data file for you, with the contacts you should contact soon first.
+
     $ keepintouch keepintouch.data
     Paul Allen
     Patrick Bateman
     Huey, Louie, Dewie
+
+When _keepintouch_ is run with the argument `contact` and a person's name, it will change the last contacted date for that person to today:
 
     $ keepintouch keepintouch.data contact Paul Allen
     $
@@ -20,7 +24,6 @@ Developed by dbulysse (Benjamin Pence)
     $ keepintouch keepintouch.data
     Patrick Bateman
     Huey, Louie, Dewie
-    Paul Allen
 
 # Data Format
 
@@ -50,7 +53,7 @@ A sample data file:
     Paul Allen
  
     365
-    2014/12/22
+    2014/11/18
     Patrick Bateman
  
     365
@@ -65,9 +68,9 @@ A sample data file:
 
 For each entry in the data file, _keepintouch_ determines a score to sort the entries by:
 
-    today - (last contacted + (interval +/- 25%)) 
+    today - (last contacted + (interval +/- (0% to 25%)))
 
-where the `+/- 25%` added or subtracted is randomized each time you run _keepintouch_. Entries with the greatest score will be listed to you first and will tend to be those people that you have not contacted in a while and you wish to contact more often. You don't have to use the program on a regular basis.
+where the `+/- (0% to 25%)` added or subtracted is randomized each time you run _keepintouch_. Entries with the greatest score will be listed to you first and will tend to be those people that you have not contacted in a while and you wish to contact more often. You don't have to use the program on a regular basis.
 
 You can use the Weight Scheduler with either of these commands:
 
